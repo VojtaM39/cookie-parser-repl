@@ -64,5 +64,10 @@ function handlePrompt(input: string, _context: Context, _file: string, callback:
         callback(null, state);
         return;
     }
+
+    if (command === COMMAND_TYPE.CLEAR) {
+        process.stdout.write('\u001B[2J\u001B[0;0f');
+        callback(null);
+    }
 };
 

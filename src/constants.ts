@@ -4,4 +4,5 @@ export const COMMAND_TYPE = {
     GET: 'get',
     COPY: 'copy',
     LOG: 'log',
+    CLEAR: 'clear',
 };
