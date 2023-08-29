@@ -4,71 +4,31 @@ import repl from 'repl';
 import { Context } from 'vm';
 // @ts-ignore
 import { parse } from 'shell-quote';
-import clipboard from 'clipboardy';
 import { CookieParser } from './cookie-parser.js';
-import { COMMAND_TYPE } from './constants.js';
 import { completer } from './tools.js';
+import { CommandFactory } from './commands/command-factory.js';
+import { Command } from './commands/command.js';
 
 const initialCookie = process.argv[2] ?? '';
 
 const { context } = repl.start({ prompt: 'cparse =>  ', eval: handlePrompt, completer: (line: string) => completer(line, cookieParser) });
 
 const cookieParser = new CookieParser(initialCookie ?? '', context);
+const commandStack: Command[] = [];
 
 function handlePrompt(input: string, _context: Context, _file: string, callback: Function): void {
     const args = parse(input);
-    const command = args[0];
+    const command = CommandFactory.getCommand(callback, cookieParser, args, commandStack);
 
-    if (!Object.values(COMMAND_TYPE).includes(command)) {
+    if (!command) {
         callback(null, 'Unknown command');
         return;
     }
 
-    if (command === COMMAND_TYPE.SET) {
-        if (args.length < 3) {
-            callback(null, 'Invalid set command');
-            return;
-        }
+    command.execute();
 
-        cookieParser.setCookie(args[1], args[2]);
-        callback(null, 'Cookie set');
-        return;
-    }
-
-    if (command === COMMAND_TYPE.GET) {
-        const cookieString = cookieParser.getCookieString();
-        callback(null, cookieString);
-        return;
-    }
-
-    if (command === COMMAND_TYPE.REMOVE) {
-        if (args.length < 2) {
-            callback(null, 'Invalid remove command');
-            return;
-        }
-
-        const keys = args.slice(1);
-        keys.forEach((key: string) => cookieParser.removeCookie(key));
-        callback(null, `Cookie${keys.length > 1 ? 's' : ''} removed`);
-        return;
-    }
-
-    if (command === COMMAND_TYPE.COPY) {
-        const cookieString = cookieParser.getCookieString();
-        clipboard.writeSync(cookieString);
-        callback(null, 'Cookie copied to clipboard');
-        return;
-    }
-
-    if (command === COMMAND_TYPE.LOG) {
-        const state = cookieParser.getState();
-        callback(null, state);
-        return;
-    }
-
-    if (command === COMMAND_TYPE.CLEAR) {
-        process.stdout.write('\u001B[2J\u001B[0;0f');
-        callback(null);
+    if (command.hasUndo()) {
+        commandStack.push(command);
     }
 };
 

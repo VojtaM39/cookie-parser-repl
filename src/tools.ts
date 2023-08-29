@@ -3,6 +3,7 @@ import { CompleterResult } from 'readline';
 import { parse } from 'shell-quote';
 import { CookieParser } from './cookie-parser.js';
 import { COMMAND_TYPE } from './constants.js';
+import { Command } from './commands/command.js';
 
 export const completer = (line: string, cookieParser: CookieParser): CompleterResult => {
     const splitLine = line.split(' ');
@@ -23,6 +24,16 @@ export const completer = (line: string, cookieParser: CookieParser): CompleterRe
     }
 
     return [[], line];
+}
+
+export const getCommand = (
+    line: string, 
+    callback: Function,
+    cookieParser: CookieParser, 
+    commandStack: Command[],
+): Command | null => {
+    const args = parse(line);
+    const commandType = args[0];
 }
 
 const getAutocompleteFromValues = (current: string, values: string[]): string[] => {
