@@ -6,4 +6,5 @@ export const COMMAND_TYPE = {
     LOG: 'log',
     CLEAR: 'clear',
     UNDO: 'undo',
+    KEEP: 'keep',
 };

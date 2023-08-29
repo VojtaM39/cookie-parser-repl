@@ -1,24 +1,24 @@
 import { Command } from './command.js';
 import { KVPair } from '../types.js';
 
-export class RemoveCommand extends Command {
+export class KeepCommand extends Command {
     protected _hasUndo: boolean = true;
     private _removedCookies: KVPair[] = [];
 
     public execute(): void {
         if (this._args.length < 1) {
-            this._callback(null, 'Invalid remove command');
+            this._callback(null, 'Invalid keep command');
             return;
         }
 
-        this._removedCookies = this._args
-            .map((key: string) => ({ 
-                key, 
-                value: this._cookieParser.getCookieValue(key),
-            }))
-            .filter((kvPair): kvPair is KVPair => !!kvPair.value);
+        const toRemoveKeys = this._cookieParser.getAllKeys().filter((key) => !this._args.includes(key));
+        this._removedCookies = toRemoveKeys
+            .map((key: string) => ({
+                key,
+                value: this._cookieParser.getCookieValue(key)!,
+            }));
 
-        this._args.forEach((key: string) => this._cookieParser.removeCookie(key));
+        toRemoveKeys.forEach((key: string) => this._cookieParser.removeCookie(key));
         this._callback(null, `Cookie${this._args.length > 1 ? 's' : ''} removed`);
     }
     
