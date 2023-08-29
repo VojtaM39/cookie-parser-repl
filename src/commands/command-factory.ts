@@ -5,6 +5,7 @@ import { Command } from './command.js';
 import { CopyCommand } from './copy-command.js';
 import { GetCommand } from './get-command.js';
 import { KeepCommand } from './keep-command.js';
+import { KeysCommand } from './keys-command.js';
 import { LogCommand } from './log-command.js';
 import { RemoveCommand } from './remove-command.js';
 import { SetCommand,  } from './set-command.js';
@@ -20,6 +21,7 @@ export class CommandFactory {
         [COMMAND_TYPE.COPY]: CopyCommand,
         [COMMAND_TYPE.LOG]: LogCommand,
         [COMMAND_TYPE.KEEP]: KeepCommand,
+        [COMMAND_TYPE.KEYS]: KeysCommand,
     }
 
     public static getCommand(
