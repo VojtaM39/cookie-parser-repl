@@ -7,4 +7,5 @@ export const COMMAND_TYPE = {
     CLEAR: 'clear',
     UNDO: 'undo',
     KEEP: 'keep',
+    KEYS: 'keys',
 };
