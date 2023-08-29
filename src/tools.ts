@@ -16,7 +16,7 @@ export const completer = (line: string, cookieParser: CookieParser): CompleterRe
     // For set command only second word can be a key
     const isWritingSetCookieKey = splitLine[0] === COMMAND_TYPE.SET && splitLine.length === 2;
     // For remove command we can define a list of keys to remove
-    const isWritingRemoveCookieKey = splitLine[0] === COMMAND_TYPE.REMOVE && splitLine.length >= 2;
+    const isWritingRemoveCookieKey = [COMMAND_TYPE.REMOVE, COMMAND_TYPE.KEEP].includes(splitLine[0]) && splitLine.length >= 2;
 
     if (isWritingSetCookieKey || isWritingRemoveCookieKey) {
         const currentWord = splitLine[splitLine.length - 1];
