@@ -5,4 +5,5 @@ export const COMMAND_TYPE = {
     COPY: 'copy',
     LOG: 'log',
     CLEAR: 'clear',
+    UNDO: 'undo',
 };

@@ -18,6 +18,10 @@ export class CookieParser {
         this._cookieMap[key] = value;
     }
 
+    public getCookieValue(key: string): string | undefined {
+        return this._cookieMap[key];
+    }
+
     public removeCookie(key: string): void {
         delete this._cookieMap[key];
     }
