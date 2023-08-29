@@ -12,12 +12,14 @@ export const completer = (line: string, cookieParser: CookieParser): CompleterRe
         return [getAutocompleteFromValues(line, Object.values(COMMAND_TYPE)), line];
     }
 
-    // Autocomplete for cookie key
-    const isCookieManipulationCommand = [COMMAND_TYPE.SET, COMMAND_TYPE.REMOVE].includes(splitLine[0]);
-    const isWritingKey = splitLine.length === 2;
+    // For set command only second word can be a key
+    const isWritingSetCookieKey = splitLine[0] === COMMAND_TYPE.SET && splitLine.length === 2;
+    // For remove command we can define a list of keys to remove
+    const isWritingRemoveCookieKey = splitLine[0] === COMMAND_TYPE.REMOVE && splitLine.length >= 2;
 
-    if (isCookieManipulationCommand && isWritingKey) {
-        return [getAutocompleteFromValues(splitLine[1], cookieParser.getAllKeys()), splitLine[1]];
+    if (isWritingSetCookieKey || isWritingRemoveCookieKey) {
+        const currentWord = splitLine[splitLine.length - 1];
+        return [getAutocompleteFromValues(currentWord, cookieParser.getAllKeys()), currentWord];
     }
 
     return [[], line];
