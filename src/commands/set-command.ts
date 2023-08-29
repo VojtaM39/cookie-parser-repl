@@ -7,7 +7,8 @@ export class SetCommand extends Command {
 
     public execute(): void {
         if (this._args.length < 2) {
-            throw new Error('Not enough arguments');
+            this._callback(null, 'Not enough arguments');
+            return;
         }
 
         this._key = this._args[0];
