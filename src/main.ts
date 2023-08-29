@@ -47,8 +47,9 @@ function handlePrompt(input: string, _context: Context, _file: string, callback:
             return;
         }
 
-        cookieParser.removeCookie(args[1]);
-        callback(null, 'Cookie removed');
+        const keys = args.slice(1);
+        keys.forEach((key: string) => cookieParser.removeCookie(key));
+        callback(null, `Cookie${keys.length > 1 ? 's' : ''} removed`);
         return;
     }
 
