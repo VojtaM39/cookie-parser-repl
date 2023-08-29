@@ -26,16 +26,6 @@ export const completer = (line: string, cookieParser: CookieParser): CompleterRe
     return [[], line];
 }
 
-export const getCommand = (
-    line: string, 
-    callback: Function,
-    cookieParser: CookieParser, 
-    commandStack: Command[],
-): Command | null => {
-    const args = parse(line);
-    const commandType = args[0];
-}
-
 const getAutocompleteFromValues = (current: string, values: string[]): string[] => {
     return values.filter((value) => value.startsWith(current));
 };
