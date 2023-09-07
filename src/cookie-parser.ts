@@ -4,7 +4,7 @@ export class CookieParser {
     private _cookieMap: Record<string, string>;
 
     constructor(initialCookieString: string, context: Context) {
-        this._cookieMap = this._parseStringCookie(initialCookieString);
+        this._cookieMap = this._tryToParseJsonCookie(initialCookieString) ?? this._parseStringCookie(initialCookieString);
 
         context.set = this.setCookie.bind(this);
         context.remove = this.removeCookie.bind(this);
@@ -34,7 +34,7 @@ export class CookieParser {
         return this._cookieMap;
     }
 
-    private _parseStringCookie (cookieString: string): Record<string, string> { 
+    private _parseStringCookie(cookieString: string): Record<string, string> { 
         const cookieMap: Record<string, string> = {};
 
         cookieString.split(';').forEach((cookie) => {
@@ -43,5 +43,21 @@ export class CookieParser {
         });
 
         return cookieMap;
+    }
+
+    private _tryToParseJsonCookie(cookieJson: string): Record<string, string> | null {
+        try {
+            const cookieArray = JSON.parse(cookieJson);
+            
+            const cookieMap: Record<string, string> = {};
+            for (const cookie of cookieArray) {
+                if (cookie.name && cookie.value) cookieMap[cookie.name] = cookie.value;
+            }
+
+            return cookieMap;
+
+        } catch (error) {
+            return null;
+        }
     }
 };
