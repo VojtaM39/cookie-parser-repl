@@ -3,7 +3,6 @@ import { CompleterResult } from 'readline';
 import { parse } from 'shell-quote';
 import { CookieParser } from './cookie-parser.js';
 import { COMMAND_TYPE } from './constants.js';
-import { Command } from './commands/command.js';
 
 export const completer = (line: string, cookieParser: CookieParser): CompleterResult => {
     const splitLine = line.split(' ');
@@ -14,11 +13,11 @@ export const completer = (line: string, cookieParser: CookieParser): CompleterRe
     }
 
     // For set command only second word can be a key
-    const isWritingSetCookieKey = splitLine[0] === COMMAND_TYPE.SET && splitLine.length === 2;
+    const isWritingSingleCookieKey = [COMMAND_TYPE.SET, COMMAND_TYPE.VALUE].includes(splitLine[0]) && splitLine.length == 2;
     // For remove command we can define a list of keys to remove
     const isWritingRemoveCookieKey = [COMMAND_TYPE.REMOVE, COMMAND_TYPE.KEEP].includes(splitLine[0]) && splitLine.length >= 2;
 
-    if (isWritingSetCookieKey || isWritingRemoveCookieKey) {
+    if (isWritingSingleCookieKey || isWritingRemoveCookieKey) {
         const currentWord = splitLine[splitLine.length - 1];
         return [getAutocompleteFromValues(currentWord, cookieParser.getAllKeys()), currentWord];
     }

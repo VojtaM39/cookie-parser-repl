@@ -9,4 +9,5 @@ export const COMMAND_TYPE = {
     KEEP: 'keep',
     KEYS: 'keys',
     JSON: 'json',
+    VALUE: 'value',
 };
