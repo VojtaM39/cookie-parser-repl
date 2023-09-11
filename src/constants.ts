@@ -8,4 +8,5 @@ export const COMMAND_TYPE = {
     UNDO: 'undo',
     KEEP: 'keep',
     KEYS: 'keys',
+    JSON: 'json',
 };
