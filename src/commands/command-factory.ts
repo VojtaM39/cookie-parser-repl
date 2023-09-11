@@ -11,6 +11,7 @@ import { LogCommand } from './log-command.js';
 import { RemoveCommand } from './remove-command.js';
 import { SetCommand,  } from './set-command.js';
 import { UndoCommand } from './undo-command.js';
+import { ValueCommand } from './value-comand.js';
 
 export class CommandFactory {
     private static readonly COMMAND_MAPPING = {
@@ -24,6 +25,7 @@ export class CommandFactory {
         [COMMAND_TYPE.KEEP]: KeepCommand,
         [COMMAND_TYPE.KEYS]: KeysCommand,
         [COMMAND_TYPE.JSON]: JsonCommand,
+        [COMMAND_TYPE.VALUE]: ValueCommand
     }
 
     public static getCommand(
